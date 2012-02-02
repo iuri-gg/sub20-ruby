@@ -26,10 +26,9 @@ static VALUE s_init(VALUE self) {
 static VALUE s_lcd_write(VALUE self, VALUE str) {
     sub_handle* fd = NULL;
     VALUE s_dev;
-    char strr = 'a';
     s_dev = rb_iv_get(self, "@device");
     Data_Get_Struct(s_dev,sub_handle,fd);
-    sub_lcd_write(fd, &strr);
+    sub_lcd_write(fd, StringValueCStr(str));
     return str;
 }
 void Init_sub20() {
