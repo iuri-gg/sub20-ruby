@@ -52,10 +52,19 @@ static VALUE s_get_product_id(VALUE self) {
     return rb_str_new2(id_buf);
 }
 
+static VALUE s_strerror(VALUE self, VALUE error_code) {
+    sub_handle* fd = NULL;
+    VALUE s_dev;
+    s_dev = rb_iv_get(self, "@device");
+    Data_Get_Struct(s_dev,sub_handle,fd);
+    return rb_str_new2(sub_strerror(FIX2INT(error_code)));
+}
+
 void Init_sub20() {
     cSub20 = rb_define_class("Sub20", rb_cObject);
     rb_define_method(cSub20, "initialize", s_init, 0);
     rb_define_method(cSub20, "lcd_write", s_lcd_write, 1);
     rb_define_method(cSub20, "get_serial_number", s_get_serial_number, 0);
     rb_define_method(cSub20, "get_product_id", s_get_product_id, 0);
+    rb_define_method(cSub20, "strerror", s_strerror, 1);
 }
