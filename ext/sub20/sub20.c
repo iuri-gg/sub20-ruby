@@ -71,6 +71,26 @@ static VALUE s_gpio_config(VALUE self, VALUE set, VALUE mask) {
     return INT2FIX(ret_code);
 }
 
+static VALUE s_adc_config(VALUE self, VALUE mask) {
+    sub_handle* fd = NULL;
+    VALUE s_dev;
+    int ret_code;
+    s_dev = rb_iv_get(self, "@device");
+    Data_Get_Struct(s_dev,sub_handle,fd);
+    ret_code = sub_adc_config(fd, FIX2INT(mask));
+    return INT2FIX(ret_code);
+}
+
+static VALUE s_adc_single(VALUE self, VALUE adc_port) {
+    sub_handle* fd = NULL;
+    VALUE s_dev;
+    int adc;
+    s_dev = rb_iv_get(self, "@device");
+    Data_Get_Struct(s_dev,sub_handle,fd);
+    sub_adc_single(fd, &adc, FIX2INT(adc_port));
+    return INT2FIX(adc);
+}
+
 void Init_sub20() {
     cSub20 = rb_define_class("Sub20", rb_cObject);
     rb_define_method(cSub20, "initialize", s_init, 0);
@@ -79,4 +99,6 @@ void Init_sub20() {
     rb_define_method(cSub20, "get_product_id", s_get_product_id, 0);
     rb_define_method(cSub20, "strerror", s_strerror, 1);
     rb_define_method(cSub20, "gpio_config", s_gpio_config, 2);
+    rb_define_method(cSub20, "adc_config", s_adc_config, 1);
+    rb_define_method(cSub20, "adc_single", s_adc_single, 1);
 }
