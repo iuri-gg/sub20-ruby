@@ -60,6 +60,10 @@ static VALUE s_strerror(VALUE self, VALUE error_code) {
     return rb_str_new2(sub_strerror(FIX2INT(error_code)));
 }
 
+static VALUE s_errno(VALUE self) {
+    return INT2FIX(sub_errno);
+}
+
 static VALUE s_gpio_config(VALUE self, VALUE set, VALUE mask) {
     sub_handle* fd = NULL;
     VALUE s_dev;
@@ -98,6 +102,7 @@ void Init_sub20() {
     rb_define_method(cSub20, "get_serial_number", s_get_serial_number, 0);
     rb_define_method(cSub20, "get_product_id", s_get_product_id, 0);
     rb_define_method(cSub20, "strerror", s_strerror, 1);
+    rb_define_method(cSub20, "errno", s_errno, 0);
     rb_define_method(cSub20, "gpio_config", s_gpio_config, 2);
     rb_define_method(cSub20, "adc_config", s_adc_config, 1);
     rb_define_method(cSub20, "adc_single", s_adc_single, 1);
