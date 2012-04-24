@@ -75,6 +75,17 @@ static VALUE s_gpio_config(VALUE self, VALUE set, VALUE mask) {
     return INT2FIX(ret_code);
 }
 
+static VALUE s_gpio_read(VALUE self) {
+    sub_handle* fd = NULL;
+    VALUE s_dev;
+    sub_int32_t read_config;
+    int ret_code;
+    s_dev = rb_iv_get(self, "@device");
+    Data_Get_Struct(s_dev,sub_handle,fd);
+    ret_code = sub_gpio_read(fd, &read_config);
+    return INT2FIX(read_config);
+}
+
 static VALUE s_adc_config(VALUE self, VALUE mask) {
     sub_handle* fd = NULL;
     VALUE s_dev;
@@ -104,6 +115,7 @@ void Init_sub20() {
     rb_define_method(cSub20, "strerror", s_strerror, 1);
     rb_define_method(cSub20, "errno", s_errno, 0);
     rb_define_method(cSub20, "gpio_config", s_gpio_config, 2);
+    rb_define_method(cSub20, "gpio_read", s_gpio_read, 0);
     rb_define_method(cSub20, "adc_config", s_adc_config, 1);
     rb_define_method(cSub20, "adc_single", s_adc_single, 1);
 }
